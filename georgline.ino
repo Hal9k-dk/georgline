@@ -1,3 +1,4 @@
+#include <EEPROM.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
@@ -32,6 +33,12 @@ void setup() {
 
   file.read(buffer, BUFSIZE);
 
+  unsigned char resetCounter;
+  resetCounter = EEPROM.read(0);
+  Serial.print("Reset Count: ");
+  Serial.println(resetCounter);
+  EEPROM.write(0, ++resetCounter);
+ 
   cli();
   TCCR1A = 0;
   TCCR1B = 0; 
