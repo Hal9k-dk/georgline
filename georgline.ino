@@ -52,7 +52,7 @@ void setup() {
   TIMSK1 = (1<<OCIE1A);
   sei();
 
-  wdt_enable(WDTO_15MS);
+  wdt_enable(WDTO_1S);
 }
 
 
