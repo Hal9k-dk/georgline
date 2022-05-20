@@ -77,9 +77,11 @@ void playTriangle() {
 }
 
 ISR(TIMER1_COMPA_vect){
+   cli();
    play();
    //playTriangle();
    wdt_reset();
+   sei();
 }
 
 
