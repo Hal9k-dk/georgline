@@ -3,14 +3,19 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include <SPI.h>
-#include <SD.h>
+#include "SdFat.h"
+#include "sdios.h"
+
+#define SD_FAT_TYPE 1
+#define SPI_SPEED SD_SCK_MHZ(50)
 
 #define BUFSIZE 256
 
-File file;
+SdFat32 sd;
+File32 file;
+
 byte buffer[BUFSIZE];
 volatile unsigned char count = 0;
-
 volatile unsigned int step = 0;
 
 void setup() {
@@ -19,12 +24,12 @@ void setup() {
   
   Serial.begin(115200);
   
-  if (!SD.begin()) {
+  if (!sd.begin()) {
     Serial.println("initialization failed!");
     while (1);
   }
   Serial.println("initialization done.");
-  file = SD.open("output.raw", FILE_READ);
+  file = sd.open("output.raw", FILE_READ);
   if (!file) {
     Serial.println("file not found");
     while(1);
@@ -57,7 +62,6 @@ void play() {
     int ol = *sample>>4 & 0x3f;
     int oh = (*sample>>4 & 0xfc0) >> 4;
 
-    
     PORTC = ol;
     PORTD = oh;
 
